@@ -37,6 +37,25 @@ pip install -e .
 curl -fsSL https://install.securepipe.com | sh
 ```
 
+### User-Friendly Setup (Recommended)
+
+After installing from source, set up user-friendly aliases:
+
+```bash
+# Navigate to CLI directory
+cd securepipe_cli
+
+# Run installation script to set up aliases
+./install.sh
+
+# Reload shell configuration
+source ~/.zshrc  # or ~/.bashrc
+
+# Now you can use both commands
+securepipe --help
+sp --help
+```
+
 ## Quick Start
 
 ### 1. Authentication
@@ -44,12 +63,15 @@ curl -fsSL https://install.securepipe.com | sh
 ```bash
 # Login to SecurePipe
 securepipe auth login
+sp auth login  # Short command alias
 
 # Check authentication status
 securepipe auth status
+sp auth status  # Short command alias
 
 # Show current user
 securepipe auth whoami
+sp auth whoami  # Short command alias
 ```
 
 ### 2. Account Management
@@ -57,12 +79,15 @@ securepipe auth whoami
 ```bash
 # List accounts
 securepipe account list
+sp account list  # Short command alias
 
 # Create new account
 securepipe account create --name "My Organization"
+sp account create --name "My Organization"  # Short command alias
 
 # Select account as default
 securepipe account select <account-id>
+sp account select <account-id>  # Short command alias
 ```
 
 ### 3. Workspace Management
@@ -70,12 +95,15 @@ securepipe account select <account-id>
 ```bash
 # List workspaces
 securepipe workspace list
+sp workspace list  # Short command alias
 
 # Create workspace
 securepipe workspace create --name "Development" --account-id <account-id>
+sp workspace create --name "Development" --account-id <account-id>  # Short command alias
 
 # Select workspace as default
 securepipe workspace select <workspace-id>
+sp workspace select <workspace-id>  # Short command alias
 ```
 
 ### 4. Project Management
@@ -83,12 +111,15 @@ securepipe workspace select <workspace-id>
 ```bash
 # List projects
 securepipe project list
+sp project list  # Short command alias
 
 # Create project
 securepipe project create --name "My Project" --workspace-id <workspace-id>
+sp project create --name "My Project" --workspace-id <workspace-id>  # Short command alias
 
 # Select project as default
 securepipe project select <project-id>
+sp project select <project-id>  # Short command alias
 ```
 
 ### 5. Pipeline Management
@@ -96,15 +127,19 @@ securepipe project select <project-id>
 ```bash
 # List pipelines
 securepipe pipeline list
+sp pipeline list  # Short command alias
 
 # Create pipeline from YAML
 securepipe pipeline create --file pipeline.yaml
+sp pipeline create --file pipeline.yaml  # Short command alias
 
 # Execute pipeline
 securepipe pipeline run --pipeline-id <pipeline-id>
+sp pipeline run --pipeline-id <pipeline-id>  # Short command alias
 
 # Monitor execution
 securepipe pipeline status --pipeline-id <pipeline-id>
+sp pipeline status --pipeline-id <pipeline-id>  # Short command alias
 ```
 
 ## Configuration
@@ -137,54 +172,83 @@ export SECUREPIPE_DEFAULT_ACCOUNT="account-id"
 
 ```bash
 securepipe auth login          # Login with username/password
+sp auth login                  # Short command alias
 securepipe auth logout         # Logout and clear tokens
+sp auth logout                 # Short command alias
 securepipe auth status         # Check authentication status
+sp auth status                 # Short command alias
 securepipe auth whoami         # Show current user info
+sp auth whoami                 # Short command alias
 ```
 
 ### Account Commands
 
 ```bash
 securepipe account list        # List all accounts
+sp account list                # Short command alias
 securepipe account create      # Create new account
+sp account create              # Short command alias
 securepipe account show        # Show account details
+sp account show                # Short command alias
 securepipe account update      # Update account
+sp account update              # Short command alias
 securepipe account delete      # Delete account
+sp account delete              # Short command alias
 securepipe account select      # Select default account
+sp account select              # Short command alias
 ```
 
 ### Workspace Commands
 
 ```bash
 securepipe workspace list      # List workspaces
+sp workspace list              # Short command alias
 securepipe workspace create    # Create workspace
+sp workspace create            # Short command alias
 securepipe workspace show      # Show workspace details
+sp workspace show              # Short command alias
 securepipe workspace update    # Update workspace
+sp workspace update            # Short command alias
 securepipe workspace delete    # Delete workspace
+sp workspace delete            # Short command alias
 securepipe workspace select    # Select default workspace
+sp workspace select            # Short command alias
 ```
 
 ### Project Commands
 
 ```bash
 securepipe project list        # List projects
+sp project list                # Short command alias
 securepipe project create      # Create project
+sp project create              # Short command alias
 securepipe project show        # Show project details
+sp project show                # Short command alias
 securepipe project update      # Update project
+sp project update              # Short command alias
 securepipe project delete      # Delete project
+sp project delete              # Short command alias
 securepipe project select      # Select default project
+sp project select              # Short command alias
 ```
 
 ### Pipeline Commands
 
 ```bash
 securepipe pipeline list       # List pipelines
+sp pipeline list               # Short command alias
 securepipe pipeline create     # Create pipeline
+sp pipeline create             # Short command alias
 securepipe pipeline show       # Show pipeline details
+sp pipeline show               # Short command alias
 securepipe pipeline run        # Execute pipeline
+sp pipeline run                # Short command alias
 securepipe pipeline status     # Check execution status
+sp pipeline status             # Short command alias
 securepipe pipeline logs       # View execution logs
+sp pipeline logs               # Short command alias
 securepipe pipeline delete     # Delete pipeline
+sp pipeline delete             # Short command alias
 ```
 
 ### Security Commands
