@@ -197,7 +197,7 @@ def list(account_id: Optional[str]):
                 click.echo("❌ No account ID specified and no default account set")
                 return
         
-        data = make_request('GET', f'/api/v1/accounts/{account_id}/workspaces/')
+        data = make_request('GET', f'/api/v1/workspaces/?account_id={account_id}')
         workspaces = data.get('workspaces', data.get('items', []))
         
         if not workspaces:
@@ -210,6 +210,36 @@ def list(account_id: Optional[str]):
             
     except Exception as e:
         click.echo(f"❌ Failed to list workspaces: {e}")
+
+@workspace.command()
+@click.option('--name', '-n', prompt=True, help='Workspace name')
+@click.option('--description', '-d', help='Workspace description')
+@click.option('--account-id', '-a', help='Account ID (uses default if not specified)')
+def create(name: str, description: Optional[str], account_id: Optional[str]):
+    """Create a new workspace"""
+    try:
+        config = load_config()
+        if not account_id:
+            account_id = config.get('default_account_id')
+            if not account_id:
+                click.echo("❌ No account ID specified and no default account set")
+                return
+        
+        workspace_data = {
+            'name': name
+        }
+        if description:
+            workspace_data['description'] = description
+        
+        data = make_request('POST', '/api/v1/workspaces/', workspace_data)
+        
+        click.echo("✅ Workspace created successfully!")
+        click.echo(f"🏢 Name: {data.get('name', 'Unknown')}")
+        click.echo(f"🆔 ID: {data.get('id', 'Unknown')}")
+        click.echo(f"📝 Description: {data.get('description', 'None')}")
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to create workspace: {e}")
 
 # Project Commands
 @cli.group()
@@ -234,7 +264,7 @@ def list(workspace_id: Optional[str]):
             click.echo("❌ No default account set")
             return
         
-        data = make_request('GET', f'/api/v1/accounts/{account_id}/workspaces/{workspace_id}/projects/')
+        data = make_request('GET', f'/api/v1/projects/?workspace_id={workspace_id}')
         projects = data.get('projects', data.get('items', []))
         
         if not projects:
@@ -247,6 +277,37 @@ def list(workspace_id: Optional[str]):
             
     except Exception as e:
         click.echo(f"❌ Failed to list projects: {e}")
+
+@project.command()
+@click.option('--name', '-n', prompt=True, help='Project name')
+@click.option('--description', '-d', help='Project description')
+@click.option('--workspace-id', '-w', help='Workspace ID (uses default if not specified)')
+def create(name: str, description: Optional[str], workspace_id: Optional[str]):
+    """Create a new project"""
+    try:
+        config = load_config()
+        if not workspace_id:
+            workspace_id = config.get('default_workspace_id')
+            if not workspace_id:
+                click.echo("❌ No workspace ID specified and no default workspace set")
+                return
+        
+        project_data = {
+            'name': name,
+            'workspace_id': int(workspace_id)
+        }
+        if description:
+            project_data['description'] = description
+        
+        data = make_request('POST', '/api/v1/projects/', project_data)
+        
+        click.echo("✅ Project created successfully!")
+        click.echo(f"📁 Name: {data.get('name', 'Unknown')}")
+        click.echo(f"🆔 ID: {data.get('id', 'Unknown')}")
+        click.echo(f"📝 Description: {data.get('description', 'None')}")
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to create project: {e}")
 
 # Pipeline Commands
 @cli.group()
@@ -272,7 +333,7 @@ def list(project_id: Optional[str]):
             click.echo("❌ No default account or workspace set")
             return
         
-        data = make_request('GET', f'/api/v1/accounts/{account_id}/workspaces/{workspace_id}/projects/{project_id}/pipelines/')
+        data = make_request('GET', f'/api/v1/pipelines/?project_id={project_id}')
         pipelines = data.get('pipelines', data.get('items', []))
         
         if not pipelines:
@@ -285,6 +346,89 @@ def list(project_id: Optional[str]):
             
     except Exception as e:
         click.echo(f"❌ Failed to list pipelines: {e}")
+
+@pipeline.command()
+@click.option('--name', '-n', prompt=True, help='Pipeline name')
+@click.option('--description', '-d', help='Pipeline description')
+@click.option('--project-id', '-p', help='Project ID (uses default if not specified)')
+def create(name: str, description: Optional[str], project_id: Optional[str]):
+    """Create a new pipeline"""
+    try:
+        config = load_config()
+        if not project_id:
+            project_id = config.get('default_project_id')
+            if not project_id:
+                click.echo("❌ No project ID specified and no default project set")
+                return
+        
+        pipeline_data = {
+            'name': name,
+            'project_id': int(project_id)
+        }
+        if description:
+            pipeline_data['description'] = description
+        
+        data = make_request('POST', '/api/v1/pipelines/', pipeline_data)
+        
+        click.echo("✅ Pipeline created successfully!")
+        click.echo(f"🔄 Name: {data.get('name', 'Unknown')}")
+        click.echo(f"🆔 ID: {data.get('id', 'Unknown')}")
+        click.echo(f"📝 Description: {data.get('description', 'None')}")
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to create pipeline: {e}")
+
+# Audit Commands
+@cli.group()
+def audit():
+    """Audit log commands"""
+    pass
+
+@audit.command()
+@click.option('--limit', '-l', default=10, help='Number of logs to show')
+@click.option('--type', '-t', type=click.Choice(['sam', 'general']), default='sam', help='Type of audit logs')
+def logs(limit: int, type: str):
+    """Show audit logs"""
+    try:
+        if type == 'sam':
+            data = make_request('GET', f'/api/v1/sam/audit/permission-checks?limit={limit}')
+        else:
+            data = make_request('GET', f'/api/v1/governance/audit-logs?limit={limit}')
+        
+        if not data:
+            click.echo("No audit logs found")
+            return
+        
+        click.echo(f"📋 {type.upper()} Audit Logs ({len(data)}):")
+        for i, log in enumerate(data, 1):
+            if type == 'sam':
+                click.echo(f"  {i}. [{log.get('event_timestamp', 'Unknown')}] User {log.get('user_id', 'Unknown')} - {log.get('action', 'Unknown')} on {log.get('resource', 'Unknown')} - {'✅ Granted' if log.get('permission_granted') else '❌ Denied'}")
+            else:
+                click.echo(f"  {i}. [{log.get('timestamp', 'Unknown')}] User {log.get('user_id', 'Unknown')} - {log.get('action', 'Unknown')} on {log.get('resource_type', 'Unknown')}")
+            
+    except Exception as e:
+        click.echo(f"❌ Failed to get audit logs: {e}")
+
+@audit.command()
+def stats():
+    """Show audit statistics"""
+    try:
+        data = make_request('GET', '/api/v1/sam/audit/stats/overview')
+        
+        if not data:
+            click.echo("No audit statistics available")
+            return
+        
+        click.echo("📊 SAM Audit Statistics:")
+        click.echo(f"  🔐 Permission Checks: {data.get('permission_checks', {}).get('total', 0)}")
+        click.echo(f"  ✅ Granted: {data.get('permission_checks', {}).get('granted', 0)}")
+        click.echo(f"  ❌ Denied: {data.get('permission_checks', {}).get('denied', 0)}")
+        click.echo(f"  📈 Grant Rate: {data.get('permission_checks', {}).get('grant_rate', 0):.1f}%")
+        click.echo(f"  👥 Role Operations: {data.get('role_operations', {}).get('total', 0)}")
+        click.echo(f"  📋 Policy Operations: {data.get('policy_operations', {}).get('total', 0)}")
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to get audit statistics: {e}")
 
 # Config Commands
 @cli.group()
@@ -306,6 +450,32 @@ def show():
     click.echo(f"  Account ID: {config_data.get('default_account_id', 'Not set')}")
     click.echo(f"  Workspace ID: {config_data.get('default_workspace_id', 'Not set')}")
     click.echo(f"  Project ID: {config_data.get('default_project_id', 'Not set')}")
+
+@config.command()
+@click.option('--account-id', '-a', help='Set default account ID')
+@click.option('--workspace-id', '-w', help='Set default workspace ID')
+@click.option('--project-id', '-p', help='Set default project ID')
+def set(account_id: Optional[str], workspace_id: Optional[str], project_id: Optional[str]):
+    """Set configuration values"""
+    config_data = load_config() or {}
+    
+    if account_id:
+        config_data['default_account_id'] = account_id
+        click.echo(f"✅ Default account ID set to: {account_id}")
+    
+    if workspace_id:
+        config_data['default_workspace_id'] = workspace_id
+        click.echo(f"✅ Default workspace ID set to: {workspace_id}")
+    
+    if project_id:
+        config_data['default_project_id'] = project_id
+        click.echo(f"✅ Default project ID set to: {project_id}")
+    
+    if not any([account_id, workspace_id, project_id]):
+        click.echo("❌ Please specify at least one value to set (--account-id, --workspace-id, or --project-id)")
+        return
+    
+    save_config(config_data)
 
 @config.command()
 def reset():

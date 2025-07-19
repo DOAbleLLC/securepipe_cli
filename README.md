@@ -2,6 +2,8 @@
 
 A comprehensive command-line interface for SecurePipe - the secure infrastructure pipeline management platform.
 
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+
 ## Features
 
 - 🔐 **Authentication & Authorization**: Secure login with JWT tokens and SAM integration

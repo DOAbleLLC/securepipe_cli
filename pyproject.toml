@@ -10,13 +10,13 @@ authors = [
     {name = "SecurePipe Team", email = "team@securepipe.com"}
 ]
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Proprietary"}
 requires-python = ">=3.8"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
@@ -70,7 +70,7 @@ version = "1.0.0"
 description = "SecurePipe CLI - Secure Infrastructure Pipeline Management"
 authors = ["SecurePipe Team <team@securepipe.com>"]
 readme = "README.md"
-license = "MIT"
+license = "Proprietary"
 packages = [{include = "securepipe_cli", from = "src"}]
 keywords = ["cli", "infrastructure", "security", "pipeline", "devops"]
 
