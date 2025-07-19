@@ -57,6 +57,7 @@ test = [
 
 [project.scripts]
 securepipe = "securepipe_cli.main:cli"
+sp = "securepipe_cli.main:cli"
 
 [project.urls]
 Homepage = "https://github.com/securepipe/securepipe-cli"
@@ -96,6 +97,7 @@ pre-commit = "^2.19.0"
 
 [tool.poetry.scripts]
 securepipe = "securepipe_cli.main:cli"
+sp = "securepipe_cli.main:cli"
 
 [tool.black]
 line-length = 88
