@@ -69,10 +69,26 @@ def make_request(method: str, endpoint: str, data: Optional[Dict] = None, params
     except Exception as e:
         raise click.ClickException(f"Request failed: {e}")
 
-@click.group()
+def show_welcome_banner():
+    """Display the SecurePipe welcome banner"""
+    click.echo("+======================================================================================+")
+    click.echo("|   ███████╗███████╗ ██████╗██╗   ██╗██████╗ ███████╗    ██████╗ ██╗██████╗ ███████╗   |")
+    click.echo("|   ██╔════╝██╔════╝██╔════╝██║   ██║██╔══██╗██╔════╝    ██╔══██╗██║██╔══██╗██╔════╝   |")
+    click.echo("|   ███████╗█████╗  ██║     ██║   ██║██████╔╝█████╗      ██████╔╝██║██████╔╝█████╗     |")
+    click.echo("|   ╚════██║██╔══╝  ██║     ██║   ██║██╔══██╗██╔══╝      ██╔═══╝ ██║██╔═══╝ ██╔══╝     |")
+    click.echo("|   ███████║███████╗╚██████╗╚██████╔╝██║  ██║███████╗    ██║     ██║██║     ███████╗   |")
+    click.echo("|   ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝     ╚═╝╚═╝     ╚══════╝   |")
+    click.echo("+======================================================================================+")
+    click.echo("")
+
+@click.group(invoke_without_command=True)
 @click.version_option(version="1.0.0", prog_name="SecurePipe")
-def cli():
+@click.pass_context
+def cli(ctx):
     """SecurePipe CLI - Secure Infrastructure Pipeline Management"""
+    if ctx.invoked_subcommand is None:
+        show_welcome_banner()
+        click.echo(ctx.get_help())
     pass
 
 # Authentication Commands
