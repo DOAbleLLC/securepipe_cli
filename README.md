@@ -160,6 +160,20 @@ securepipe pipeline status --pipeline-id <pipeline-id>
 sp pipeline status --pipeline-id <pipeline-id>  # Short command alias
 ```
 
+## Health Check Commands
+
+The CLI provides health status checks directly against the SecurePipe backend:
+
+```bash
+securepipe health status      # GET /api/v1/health - Check backend status
+securepipe health detailed    # GET /api/v1/health/detailed - Check full system health (DB/Redis/S3/Nomad)
+securepipe health ready       # GET /api/v1/health/ready - Check readiness endpoint
+```
+
+If health checks fail or your CLI cannot connect, run these as your first troubleshooting step. They return pretty JSON if 'rich' is installed, or plain formatted output.
+
+---
+
 ## Configuration
 
 The CLI stores configuration in `~/.securepipe/config.json`:

@@ -78,6 +78,13 @@ securepipe audit logs      # Show audit logs
 securepipe audit stats     # Show audit statistics
 ```
 
+### Health Check
+```bash
+securepipe health status     # Check backend health (basic)
+securepipe health detailed   # Full subsystem health (DB/Redis/S3/Nomad)
+securepipe health ready      # Readiness endpoint for orchestration
+```
+
 ## 🎯 Short Commands (sp)
 
 All commands work with the short `sp` alias:
@@ -134,6 +141,12 @@ If `securepipe` or `sp` commands are not found:
    ```bash
    pip install -e .
    ```
+
+When encountering connection issues, always run a health check to debug backend state:
+```bash
+securepipe health status
+securepipe health detailed
+```
 
 ## 📁 File Structure
 ```
