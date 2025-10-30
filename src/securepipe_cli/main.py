@@ -503,5 +503,50 @@ def reset():
             config_file.unlink()
         click.echo("✅ Configuration reset")
 
+# Health Commands
+@cli.group()
+def health():
+    """Health check commands (backend status & dependencies)."""
+    pass
+
+@health.command('status')
+def health_status():
+    """Check basic backend health (/api/v1/health)"""
+    try:
+        data = make_request('GET', '/api/v1/health')
+        try:
+            from rich import print_json
+            print_json(json.dumps(data))
+        except ImportError:
+            click.echo(json.dumps(data, indent=2))
+    except Exception as e:
+        click.echo(f"❌ Health check failed: {e}")
+
+@health.command('detailed')
+def health_detailed():
+    """Check detailed backend health (/api/v1/health/detailed)"""
+    try:
+        data = make_request('GET', '/api/v1/health/detailed')
+        try:
+            from rich import print_json
+            print_json(json.dumps(data))
+        except ImportError:
+            click.echo(json.dumps(data, indent=2))
+    except Exception as e:
+        click.echo(f"❌ Detailed health check failed: {e}")
+
+@health.command('ready')
+def health_ready():
+    """Check readiness endpoint (/api/v1/health/ready)"""
+    try:
+        data = make_request('GET', '/api/v1/health/ready')
+        try:
+            from rich import print_json
+            print_json(json.dumps(data))
+        except ImportError:
+            click.echo(json.dumps(data, indent=2))
+    except Exception as e:
+        click.echo(f"❌ Readiness check failed: {e}")
+
 if __name__ == '__main__':
     cli() 
