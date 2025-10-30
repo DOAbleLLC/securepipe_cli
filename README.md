@@ -23,6 +23,17 @@ A comprehensive command-line interface for SecurePipe - the secure infrastructur
 pip install securepipe-cli
 ```
 
+## Backend Health Notes
+
+If CLI commands cannot reach the backend, verify service health:
+
+```bash
+curl http://localhost:8000/api/v1/health
+curl http://localhost:8000/api/v1/health/detailed
+```
+
+Default backend rate limit is 100 requests/min per client IP.
+
 ### From Source
 
 ```bash

@@ -98,6 +98,17 @@ RuntimeWarning: 'src.securepipe_cli.main' found in sys.modules...
 
 **Solution**: Use `./securepipe` instead of `python3 -m src.securepipe_cli.main`
 
+### Backend Health
+
+If commands fail with connectivity errors, verify backend health:
+
+```bash
+curl http://localhost:8000/api/v1/health
+curl http://localhost:8000/api/v1/health/detailed
+```
+
+If health fails, see backend troubleshooting for Redis/S3/Nomad checks.
+
 ### Command Not Found
 If `securepipe` or `sp` commands are not found:
 
