@@ -1,3 +1,0 @@
-"""
-SecurePipe CLI Commands
-"""
