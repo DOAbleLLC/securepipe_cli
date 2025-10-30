@@ -1,0 +1,30 @@
+[project]
+name = "securepipe-cli"
+version = "1.1.0"
+description = "SecurePipe CLI"
+authors = [{ name = "SecurePipe" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "click>=8.1.7",
+  "requests>=2.32.3"
+]
+
+[project.scripts]
+securepipe = "securepipe_cli.main:cli"
+sp = "securepipe_cli.main:cli"
+
+[tool.poetry]
+name = "securepipe-cli"
+version = "1.1.0"
+description = "SecurePipe CLI"
+authors = ["SecurePipe"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+click = "^8.1.7"
+requests = "^2.32.3"
+
+[tool.poetry.scripts]
+securepipe = "securepipe_cli.main:cli"
+sp = "securepipe_cli.main:cli"
