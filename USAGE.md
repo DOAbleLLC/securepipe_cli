@@ -109,6 +109,13 @@ curl http://localhost:8000/api/v1/health/detailed
 
 If health fails, see backend troubleshooting for Redis/S3/Nomad checks.
 
+If the database shows unhealthy but Postgres is reachable, restart backend to load latest code/config (Compose doesn't auto-reload):
+
+```bash
+cd ../securepipe
+docker compose restart backend
+```
+
 ### Command Not Found
 If `securepipe` or `sp` commands are not found:
 

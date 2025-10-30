@@ -34,6 +34,13 @@ curl http://localhost:8000/api/v1/health/detailed
 
 Default backend rate limit is 100 requests/min per client IP.
 
+If backend health reports the DB as unhealthy but Postgres is up, restart the backend container to ensure latest code/config is loaded (Compose is not using auto-reload):
+
+```bash
+cd ../securepipe
+docker compose restart backend
+```
+
 ### From Source
 
 ```bash
